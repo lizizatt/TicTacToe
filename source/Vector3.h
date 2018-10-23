@@ -28,6 +28,11 @@ struct Vector3
 		return Vector3(X + A, Y + A, Z + A);
 	}
 
+	inline Vector3 operator * (const float A) const
+	{
+		return Vector3(X * A, Y * A, Z * A);
+	}
+
 	inline float Dot(const Vector3& A) const
 	{
 		return A.X*X + A.Y*Y + A.Z*Z;
@@ -41,6 +46,9 @@ struct Vector3
 	inline Vector3 Normalize() const
 	{
 		float v = sqrt(X*X + Y * Y + Z * Z);
+		if (v == 0) {
+			return Vector3::one();
+		}
 		return Vector3(X / v, Y / v, Z / v);
 	}
 

@@ -18,26 +18,8 @@ public:
 		//todo, rotation
 
 		matrix = (GLfloat*)malloc(sizeof(GLfloat) * 16);
-
-		matrix[0] = 1;
-		matrix[1] = 0;
-		matrix[2] = 0;
-		matrix[3] = position.X;
 		
-		matrix[4] = 0;
-		matrix[5] = 1;
-		matrix[6] = 0;
-		matrix[7] = position.Y;
-		
-		matrix[8] = 0;
-		matrix[9] = 0;
-		matrix[10] = 1;
-		matrix[11] = position.Z;
-		
-		matrix[12] = scale.X;
-		matrix[13] = scale.Y;
-		matrix[14] = scale.Z;
-		matrix[15] = 1;
+		Update(position, forward, scale);
 	}
 
 	inline Mat16()
@@ -76,19 +58,22 @@ public:
 
 	inline void Update(Vector3 position, Vector3 forward, Vector3 scale)
 	{
-		matrix[0] = 1;
-		matrix[1] = 0;
-		matrix[2] = 0;
+		Vector3 up = Vector3::y();
+		Vector3 right = forward.Cross(up).Normalize();
+
+		matrix[0] = right.X;
+		matrix[1] = right.Y;
+		matrix[2] = right.Z;
 		matrix[3] = position.X;
 
-		matrix[4] = 0;
-		matrix[5] = 1;
-		matrix[6] = 0;
+		matrix[4] = up.X;
+		matrix[5] = up.Y;
+		matrix[6] = up.Z;
 		matrix[7] = position.Y;
 
-		matrix[8] = 0;
-		matrix[9] = 0;
-		matrix[10] = 1;
+		matrix[8] = forward.X;
+		matrix[9] = forward.Y;
+		matrix[10] = forward.Z;
 		matrix[11] = position.Z;
 
 		matrix[12] = scale.X;

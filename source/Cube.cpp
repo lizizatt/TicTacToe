@@ -107,7 +107,7 @@ Cube::~Cube()
 
 void Cube::draw(Mat16 parentMVP)
 {
-	Mat16 targetMVP = parentMVP * mvp;
+	Mat16 targetMVP = mvp * parentMVP;
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, targetMVP.matrix);
 
 	glEnableVertexAttribArray(0);

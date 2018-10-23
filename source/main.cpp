@@ -124,7 +124,12 @@ void MainRunner::FocusOnScene(Scene *scene)
 
 void MainRunner::UpdateCamera()
 {
-	cameraMVP.Update(cameraPos, cameraForward, Vector3::one());
+	static int counter = 0;
+	counter++;
+
+	Vector3 mod = Vector3::y() * sin(counter * .001);
+	Vector3 forward = Vector3::x() * sin(counter * .001) + Vector3::z() * cos(counter * .001);
+	cameraMVP.Update(cameraPos + mod, forward, Vector3::one());
 }
 
 string MainRunner::ExePath() {
