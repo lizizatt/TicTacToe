@@ -94,9 +94,26 @@ Cube::Cube(Vector3 pos, Vector3 forward, Vector3 scale, Vector3 baseColor, strin
 	: pos(pos), forward(forward), scale(scale), baseColor(baseColor), textureFileName(textureFileName)
 {
 	mvp = (GLfloat*)malloc(sizeof(GLfloat) * 16);
-	for (int i = 0; i < 16; i++) {
-		mvp[i] = (i % 4) == 0 ? 1.0f : 0.0f;
-	}
+	
+	mvp[0] = 1;
+	mvp[1] = 0;
+	mvp[2] = 0;
+	mvp[3] = pos.X;
+
+	mvp[4] = 0;
+	mvp[5] = 1;
+	mvp[6] = 0;
+	mvp[7] = pos.Y;
+
+	mvp[8] = 0;
+	mvp[9] = 0;
+	mvp[10] = 1;
+	mvp[11] = pos.Z;
+
+	mvp[12] = scale.X;
+	mvp[13] = scale.Y;
+	mvp[14] = scale.Z;
+	mvp[15] = 1;
 }
 
 
