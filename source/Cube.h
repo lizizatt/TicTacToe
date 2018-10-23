@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <gl/GL.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
@@ -15,9 +16,10 @@ public:
 	Cube(Vector3 pos, Vector3 forward, Vector3 scale, Vector3 baseColor, string textureFileName = "");
 	~Cube();
 
-	void setup();
 	void draw();
-	void teardown();
+
+	static void SetUpCube();
+	static void TearDownCube();
 
 private:
 	Vector3 pos;
@@ -25,5 +27,11 @@ private:
 	Vector3 scale;
 	Vector3 baseColor;
 	string textureFileName;
+
+	GLfloat* mvp;
+	
+	static GLuint VertexArrayID;
+	static GLuint vertexbuffer;
+	static GLuint colorbuffer;
 };
 

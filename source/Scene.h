@@ -14,25 +14,12 @@ class Scene
 {
 public:
 	virtual void InitializeScene() = 0;
+	virtual void TearDownScene() {}
 
 	virtual inline void drawScene()
 	{
 		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].draw();
-		}
-	}
-
-	virtual inline void setUpScene()
-	{
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].setup();
-		}
-	}
-
-	virtual inline void tearDownScene()
-	{
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].teardown();
+			cubes[i]->draw();
 		}
 	}
 
@@ -47,7 +34,7 @@ public:
 	}
 
 protected:
-	vector<Cube> cubes;
+	vector<shared_ptr<Cube>> cubes;
 	Vector3 pos;
 	Vector3 forward;
 };
