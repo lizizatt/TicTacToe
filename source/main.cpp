@@ -1,7 +1,25 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "main.h"
 
-#include <stdio.h>
+
+MainRunner::MainRunner()
+{
+}
+
+MainRunner::~MainRunner()
+{
+}
+
+void MainRunner::SetUpScenes()
+{
+}
+
+void MainRunner::DrawScenes()
+{
+}
+
+void MainRunner::TearDownScenes()
+{
+}
 
 namespace {
    void errorCallback(int error, const char* description) {
@@ -40,7 +58,6 @@ namespace {
       return window;
    }
 }
-
 int main(int argc, char* argv[]) {
    glfwSetErrorCallback(errorCallback);
 
@@ -49,15 +66,23 @@ int main(int argc, char* argv[]) {
       return 0;
    }
 
+   MainRunner mainRunner;
+
    // Set the clear color to a nice green
    glClearColor(0.15f, 0.6f, 0.4f, 1.0f);
+
+   mainRunner.SetUpScenes();
 
    while (!glfwWindowShouldClose(window)) {
       glClear(GL_COLOR_BUFFER_BIT);
 
+	  mainRunner.DrawScenes();
+
       glfwSwapBuffers(window);
       glfwPollEvents();
    }
+   
+   mainRunner.TearDownScenes();
 
    glfwDestroyWindow(window);
    glfwTerminate();

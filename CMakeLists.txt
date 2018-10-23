@@ -5,10 +5,15 @@ project(TicTacToe)
 # Source files
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries")
-set(SOURCES "${SRC_DIR}/main.cpp;${SRC_DIR}/Vector3.h;${SRC_DIR}/Cube.h;${SRC_DIR}/Cube.cpp")
+
+include_directories(${SRC_DIR})
+file(GLOB all_SRCS
+        "${SRC_DIR}/*.h"
+        "${SRC_DIR}/*.cpp"
+        )
 
 # Executable definition and properties
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${all_SRCS})
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
