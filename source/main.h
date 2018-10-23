@@ -5,6 +5,7 @@
 #include "IntroScene.h"
 #include "GameScene.h"
 #include "EndScene.h"
+#include "Mat16.h"
 
 class MainRunner
 {
@@ -38,6 +39,7 @@ private:
 private:
 	string ExePath();
 	static MainRunner* instance;
+	Mat16 cameraMVP;
 };
 
 int main(int argc, char* argv[]);

@@ -8,5 +8,6 @@ class EndScene : public Scene
 {
 public:
 	void InitializeScene() override;
+	void TearDownScene() override;
 };
 

@@ -14,12 +14,12 @@ class Scene
 {
 public:
 	virtual void InitializeScene() = 0;
-	virtual void TearDownScene() {}
+	virtual void TearDownScene() = 0;
 
-	virtual inline void drawScene()
+	virtual inline void drawScene(Mat16 mvp)
 	{
 		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i]->draw();
+			cubes[i]->draw(mvp);
 		}
 	}
 
@@ -37,4 +37,7 @@ protected:
 	vector<shared_ptr<Cube>> cubes;
 	Vector3 pos;
 	Vector3 forward;
+	Vector3 scale;
+
+	Mat16 mvp;
 };

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include "Vector3.h"
+#include "Mat16.h"
 
 using namespace std;
 
@@ -13,10 +14,11 @@ class Cube
 {
 public:
 	Cube();
-	Cube(Vector3 pos, Vector3 forward, Vector3 scale, Vector3 baseColor, string textureFileName = "");
+	Cube(Cube &c);
+	Cube(Vector3 pos, Vector3 forward, Vector3 scale, string textureFileName = "");
 	~Cube();
 
-	void draw();
+	void draw(Mat16 mvp);
 
 	static void SetUpCube();
 	static void TearDownCube();
@@ -28,7 +30,7 @@ private:
 	Vector3 baseColor;
 	string textureFileName;
 
-	GLfloat* mvp;
+	Mat16 mvp;
 	
 	static GLuint VertexArrayID;
 	static GLuint vertexbuffer;

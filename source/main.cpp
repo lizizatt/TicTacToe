@@ -15,7 +15,7 @@ MainRunner::MainRunner()
 	instance = this;
 
 	//initialize one of each scene
-	scenes.push_back(make_shared<IntroScene>());
+	scenes.push_back(make_shared<IntroScene>(Vector3::z(), Vector3::z(), Vector3::one()));
 	scenes.push_back(make_shared<GameScene>());
 	scenes.push_back(make_shared<EndScene>());
 }
@@ -103,7 +103,7 @@ void MainRunner::SetUpScenes()
 void MainRunner::DrawScenes()
 {
 	for (int i = 0; i < scenes.size(); i++) {
-		scenes[i]->drawScene();
+		scenes[i]->drawScene(cameraMVP);
 	}
 }
 
@@ -123,8 +123,6 @@ void MainRunner::FocusOnScene(Scene *scene)
 
 void MainRunner::UpdateCamera()
 {
-	//todo
-	//Vector3 right = Vector3::y().Cross(cameraForward).Normalize();
 }
 
 string MainRunner::ExePath() {
@@ -183,8 +181,7 @@ int main(int argc, char* argv[]) {
 
 	MainRunner mainRunner;
 
-	// Set the clear color to a nice green
-	glClearColor(0.15f, 0.6f, 0.4f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	mainRunner.SetUpShaders();
 

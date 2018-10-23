@@ -2,5 +2,8 @@
 
 void GameScene::InitializeScene()
 {
+}
 
+void GameScene::TearDownScene()
+{
 }

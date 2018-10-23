@@ -86,46 +86,29 @@ GLuint Cube::VertexArrayID;
 
 
 Cube::Cube()
-: Cube(Vector3::zero(), Vector3::one(), Vector3::one(), Vector3::one())
+	: Cube(Vector3::zero(), Vector3::one(), Vector3::one(), "")
+{
+}
+	
+Cube::Cube(Cube &c)
+	: Cube(c.pos, c.forward, c.scale, c.textureFileName)
 {
 }
 
-Cube::Cube(Vector3 pos, Vector3 forward, Vector3 scale, Vector3 baseColor, string textureFileName)
-	: pos(pos), forward(forward), scale(scale), baseColor(baseColor), textureFileName(textureFileName)
+Cube::Cube(Vector3 pos, Vector3 forward, Vector3 scale, string textureFileName)
+	: pos(pos), forward(forward), scale(scale), textureFileName(textureFileName), mvp(pos, forward, scale)
 {
-	mvp = (GLfloat*)malloc(sizeof(GLfloat) * 16);
-	
-	mvp[0] = 1;
-	mvp[1] = 0;
-	mvp[2] = 0;
-	mvp[3] = pos.X;
-
-	mvp[4] = 0;
-	mvp[5] = 1;
-	mvp[6] = 0;
-	mvp[7] = pos.Y;
-
-	mvp[8] = 0;
-	mvp[9] = 0;
-	mvp[10] = 1;
-	mvp[11] = pos.Z;
-
-	mvp[12] = scale.X;
-	mvp[13] = scale.Y;
-	mvp[14] = scale.Z;
-	mvp[15] = 1;
 }
 
 
 Cube::~Cube()
 {
-	delete mvp;
 }
 
-void Cube::draw()
+void Cube::draw(Mat16 parentMVP)
 {
-
-	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, mvp);
+	Mat16 targetMVP = parentMVP * mvp;
+	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, targetMVP.matrix);
 
 	glEnableVertexAttribArray(0);
 
@@ -139,7 +122,7 @@ void Cube::draw()
 		0,                  // stride
 		(void*)0            // array buffer offset
 	);
-	cout << "glVertexAttribPointer " << glGetError() << "\n";
+	
 
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -152,16 +135,16 @@ void Cube::draw()
 		(void*)0                          // array buffer offset
 	);
 
-
-	//glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, mvp);
-
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	cout << "glDrawArrays: " << glGetError() << "\n";
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 
-	cout << "Draw with glGetError" << glGetError() << "\n";
+	static bool once = false;
+	if (!once) {
+		once = true;
+		cout << "Draw with glGetError" << glGetError() << "\n";
+	}
 }
 
 void Cube::SetUpCube()
