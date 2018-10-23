@@ -111,9 +111,7 @@ void Cube::draw(Mat16 parentMVP)
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, targetMVP.matrix);
 
 	glEnableVertexAttribArray(0);
-
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size

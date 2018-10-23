@@ -16,16 +16,17 @@ public:
 	virtual void InitializeScene() = 0;
 	virtual void TearDownScene() = 0;
 
-	virtual inline void drawScene(Mat16 mvp)
+	virtual inline void drawScene(Mat16 parentMVP)
 	{
+		Mat16 targetMVP = parentMVP * mvp;
 		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i]->draw(mvp);
+			cubes[i]->draw(targetMVP);
 		}
 	}
 
 	virtual inline Vector3 Position()
 	{
-		return pos;
+		return position;
 	}
 
 	virtual inline Vector3 Forward()
@@ -35,7 +36,7 @@ public:
 
 protected:
 	vector<shared_ptr<Cube>> cubes;
-	Vector3 pos;
+	Vector3 position;
 	Vector3 forward;
 	Vector3 scale;
 

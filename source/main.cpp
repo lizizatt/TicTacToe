@@ -15,9 +15,9 @@ MainRunner::MainRunner()
 	instance = this;
 
 	//initialize one of each scene
-	scenes.push_back(make_shared<IntroScene>(Vector3::z(), Vector3::z(), Vector3::one()));
-	scenes.push_back(make_shared<GameScene>());
-	scenes.push_back(make_shared<EndScene>());
+	scenes.push_back(make_shared<IntroScene>(Vector3::z() + Vector3::x(), Vector3::z(), Vector3::one()));
+	scenes.push_back(make_shared<GameScene>(Vector3::z(), Vector3::z(), Vector3::one()));
+	scenes.push_back(make_shared<EndScene>(Vector3::z() - Vector3::x(), Vector3::z(), Vector3::one()));
 }
 
 MainRunner::~MainRunner()
@@ -98,6 +98,7 @@ void MainRunner::SetUpScenes()
 	for (int i = 0; i < scenes.size(); i++) {
 		scenes[i]->InitializeScene();
 	}
+	FocusOnScene(scenes[0].get());
 }
 
 void MainRunner::DrawScenes()
@@ -117,12 +118,13 @@ void MainRunner::TearDownScenes()
 void MainRunner::FocusOnScene(Scene *scene)
 {
 	//todo move camera over to new scene w/ a smooth glide
-	cameraPos = scene->Position() - Vector3(0, 0, 1);
+	cameraPos = scene->Position() - Vector3::z();
 	cameraForward = scene->Position() - cameraPos;
 }
 
 void MainRunner::UpdateCamera()
 {
+	cameraMVP.Update(cameraPos, cameraForward, Vector3::one());
 }
 
 string MainRunner::ExePath() {
