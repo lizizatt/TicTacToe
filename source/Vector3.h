@@ -18,6 +18,11 @@ struct Vector3
 		return Vector3(X + A.X, Y + A.Y, Z + A.Z);
 	}
 
+	inline Vector3 operator - (const Vector3& A) const
+	{
+		return Vector3(X - A.X, Y - A.Y, Z - A.Z);
+	}
+
 	inline Vector3 operator + (const float A) const
 	{
 		return Vector3(X + A, Y + A, Z + A);
@@ -26,6 +31,17 @@ struct Vector3
 	inline float Dot(const Vector3& A) const
 	{
 		return A.X*X + A.Y*Y + A.Z*Z;
+	}
+
+	inline Vector3 Cross(const Vector3& A) const
+	{
+		return Vector3(Y*A.Z - Z * A.Y, Z*A.X - X*A.Z, X*A.Y - Y*A.X);
+	}
+
+	inline Vector3 Normalize() const
+	{
+		float v = sqrt(X*X + Y * Y + Z * Z);
+		return Vector3(X / v, Y / v, Z / v);
 	}
 
 	static Vector3 zero()

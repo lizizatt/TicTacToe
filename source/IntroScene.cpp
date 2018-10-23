@@ -1,14 +1,6 @@
 #include "IntroScene.h"
 
-
-void IntroScene::drawScene()
+void IntroScene::InitializeScene()
 {
-}
 
-void IntroScene::setUpScene()
-{
-}
-
-void IntroScene::tearDownScene()
-{
 }

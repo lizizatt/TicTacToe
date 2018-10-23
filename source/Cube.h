@@ -15,6 +15,10 @@ public:
 	Cube(Vector3 pos, Vector3 forward, Vector3 scale, Vector3 baseColor, string textureFileName = "");
 	~Cube();
 
+	void setup();
+	void draw();
+	void teardown();
+
 private:
 	Vector3 pos;
 	Vector3 forward;

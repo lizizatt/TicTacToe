@@ -5,6 +5,7 @@ project(TicTacToe)
 # Source files
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries")
+set(RRESOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 
 include_directories(${SRC_DIR})
 file(GLOB all_SRCS
@@ -16,6 +17,11 @@ file(GLOB all_SRCS
 add_executable(${PROJECT_NAME} ${all_SRCS})
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+
+#Package resources
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:TicTacToe>)
 
 # GLFW
 set(GLFW_DIR "${LIB_DIR}/glfw")

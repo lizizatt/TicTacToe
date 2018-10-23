@@ -3,6 +3,10 @@
 
 MainRunner::MainRunner()
 {
+	//initialize one of each scene
+	scenes.push_back(make_shared<IntroScene>());
+	scenes.push_back(make_shared<GameScene>());
+	scenes.push_back(make_shared<EndScene>());
 }
 
 MainRunner::~MainRunner()
@@ -11,14 +15,36 @@ MainRunner::~MainRunner()
 
 void MainRunner::SetUpScenes()
 {
+	for (int i = 0; i < scenes.size(); i++) {
+		scenes[i]->setUpScene();
+	}
 }
 
 void MainRunner::DrawScenes()
 {
+	for (int i = 0; i < scenes.size(); i++) {
+		scenes[i]->drawScene();
+	}
 }
 
 void MainRunner::TearDownScenes()
 {
+	for (int i = 0; i < scenes.size(); i++) {
+		scenes[i]->tearDownScene();
+	}
+}
+
+void MainRunner::FocusOnScene(Scene *scene)
+{
+	//todo move camera over to new scene w/ a smooth glide
+	cameraPos = scene->Position() - Vector3(0, 0, 1);
+	cameraForward = scene->Position() - cameraPos;
+}
+
+void MainRunner::UpdateCamera()
+{
+	//todo
+	Vector3 right = Vector3::y().Cross(cameraForward).Normalize();
 }
 
 namespace {
@@ -76,6 +102,7 @@ int main(int argc, char* argv[]) {
    while (!glfwWindowShouldClose(window)) {
       glClear(GL_COLOR_BUFFER_BIT);
 
+	  mainRunner.UpdateCamera();
 	  mainRunner.DrawScenes();
 
       glfwSwapBuffers(window);

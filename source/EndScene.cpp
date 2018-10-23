@@ -1,13 +1,6 @@
 #include "EndScene.h"
 
-void EndScene::drawScene()
+void EndScene::InitializeScene()
 {
-}
 
-void EndScene::setUpScene()
-{
-}
-
-void EndScene::tearDownScene()
-{
 }

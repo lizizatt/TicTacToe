@@ -7,8 +7,6 @@ using namespace std;
 class EndScene : public Scene
 {
 public:
-	void drawScene() override;
-	void setUpScene() override;
-	void tearDownScene() override;
+	void InitializeScene() override;
 };
 
