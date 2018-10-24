@@ -89,18 +89,68 @@ public:
 			for (int j = 0; j < 4; j++) {
 				toRet.matrix[getIndex(i, j)] = 0;
 				for (int k = 0; k < 4; k++) {
-					toRet.matrix[getIndex(i, j)] += matrix[getIndex(i,k)] + A.matrix[getIndex(k,j)];
+					toRet.matrix[getIndex(i, j)] += matrix[getIndex(i,k)] * A.matrix[getIndex(k,j)];
 				}
 			}
 		}
 
-		print(*this);
-		cout << "\n";
-		print(A);
-		cout << "\n";
-		print(toRet);
-		cout << "-----\n";
-
 		return toRet;
+	}
+
+	inline bool operator == (const Mat16& A) const
+	{
+		const float thresh = .01;
+		for (int i = 0; i < 16; i++) {
+			if (abs(matrix[i] - A.matrix[i]) > thresh) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	inline static bool RunTests()
+	{
+		Mat16 m1(Vector3::one(), Vector3::z(), Vector3::one());
+		Mat16 m2(Vector3::one(), Vector3::z(), Vector3::one());
+
+		Mat16 expected;
+		expected.matrix[0] = 2;
+		expected.matrix[1] = 1;
+		expected.matrix[2] = 1;
+		expected.matrix[3] = 0;
+
+		expected.matrix[4] = 1;
+		expected.matrix[5] = 2;
+		expected.matrix[6] = 1;
+		expected.matrix[7] = 2;
+
+		expected.matrix[8] = 1;
+		expected.matrix[9] = 1;
+		expected.matrix[10] = 2;
+		expected.matrix[11] = 2;
+
+		expected.matrix[12] = 0;
+		expected.matrix[13] = 2;
+		expected.matrix[14] = 2;
+		expected.matrix[15] = 4;
+
+		Mat16 res = m1 * m2;
+
+		/*
+		cout << "M1:\n";
+		Mat16::print(m1);
+
+		cout << "M2:\n";
+		Mat16::print(m2);
+
+		cout << "Res:\n";
+		Mat16::print(res);
+
+		cout << "Expected:\n";
+		Mat16::print(expected);
+		*/
+
+		return res == expected;
 	}
 };

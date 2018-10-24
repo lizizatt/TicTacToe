@@ -86,7 +86,7 @@ GLuint Cube::VertexArrayID;
 
 
 Cube::Cube()
-	: Cube(Vector3::zero(), Vector3::one(), Vector3::one(), "")
+	: Cube(Vector3::zero(), Vector3::z(), Vector3::one(), "")
 {
 }
 	
@@ -108,6 +108,11 @@ Cube::~Cube()
 void Cube::draw(Mat16 parentMVP)
 {
 	Mat16 targetMVP = mvp * parentMVP;
+
+	cout << "---";
+	Mat16::print(targetMVP);
+	cout << "---";
+
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, targetMVP.matrix);
 
 	glEnableVertexAttribArray(0);

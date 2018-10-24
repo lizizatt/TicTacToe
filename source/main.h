@@ -10,6 +10,9 @@
 class MainRunner
 {
 public:
+	const bool RUN_TESTS = true;
+
+public:
 	static inline MainRunner* getInstance()
 	{
 		return instance;
@@ -24,6 +27,7 @@ public:
 	void DrawScenes();
 	void TearDownScenes();
 	void UpdateCamera();
+	bool RunTests();
 
 	void FocusOnScene(Scene* scene);
 

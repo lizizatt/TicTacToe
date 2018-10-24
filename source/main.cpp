@@ -127,9 +127,14 @@ void MainRunner::UpdateCamera()
 	static int counter = 0;
 	counter++;
 
-	Vector3 mod = Vector3::y() * sin(counter * .001);
-	Vector3 forward = Vector3::x() * sin(counter * .001) + Vector3::z() * cos(counter * .001);
-	cameraMVP.Update(cameraPos + mod, forward, Vector3::one());
+	//Vector3 mod = Vector3::y() * sin(counter * .001);
+	cameraMVP.Update(cameraPos, cameraForward * -1, Vector3::one());
+}
+
+bool MainRunner::RunTests()
+{
+	bool res = Mat16::RunTests();
+	return res;
 }
 
 string MainRunner::ExePath() {
@@ -179,14 +184,20 @@ namespace {
 
 
 int main(int argc, char* argv[]) {
+
+
+	MainRunner mainRunner;
+
+	if (mainRunner.RUN_TESTS && !mainRunner.RunTests()) {
+		return -1;
+	}
+
 	glfwSetErrorCallback(errorCallback);
 
 	GLFWwindow* window = initialize();
 	if (!window) {
 		return 0;
 	}
-
-	MainRunner mainRunner;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
