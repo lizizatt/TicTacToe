@@ -1,4 +1,0 @@
-﻿  Building Custom Rule C:/Users/Liz/TicTacToe/libraries/glm/test/core/CMakeLists.txt
-  CMake does not need to re-run because C:/Users/Liz/TicTacToe/build/libraries/glm/test/core/CMakeFiles/generate.stamp is up-to-date.
-  core_setup_force_cxx98.cpp
-  test-core_setup_force_cxx98.vcxproj -> C:\Users\Liz\TicTacToe\build\libraries\glm\test\core\Debug\test-core_setup_force_cxx98.exe
