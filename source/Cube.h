@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
-#include "Vector3.h"
-#include "Mat16.h"
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -15,22 +15,22 @@ class Cube
 public:
 	Cube();
 	Cube(Cube &c);
-	Cube(Vector3 pos, Vector3 forward, Vector3 scale, string textureFileName = "");
+	Cube(glm::vec3 pos, glm::vec3 forward, glm::vec3 scale, string textureFileName = "");
 	~Cube();
 
-	void draw(Mat16 &mvp);
+	void draw(glm::mat4 mvp);
 
 	static void SetUpCube();
 	static void TearDownCube();
 
 private:
-	Vector3 pos;
-	Vector3 forward;
-	Vector3 scale;
-	Vector3 baseColor;
+	glm::vec3 pos;
+	glm::vec3 forward;
+	glm::vec3 scale;
+	glm::vec3 baseColor;
 	string textureFileName;
 
-	Mat16 mvp;
+	glm::mat4 mvp;
 	
 	static GLuint VertexArrayID;
 	static GLuint vertexbuffer;

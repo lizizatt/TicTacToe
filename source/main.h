@@ -5,7 +5,9 @@
 #include "IntroScene.h"
 #include "GameScene.h"
 #include "EndScene.h"
-#include "Mat16.h"
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+
 
 class MainRunner
 {
@@ -27,6 +29,7 @@ public:
 		return scenes.size();
 	}
 	inline int getMVPLocation() { return mvp_location; }
+	inline glm::mat4 getPMatrix() { return cameraP; }
 
 public:
 	MainRunner();
@@ -43,15 +46,16 @@ public:
 
 private:
 	vector<Scene*> scenes;
-	Vector3 cameraPos;
-	Vector3 cameraForward;
+	glm::vec3 cameraPos;
+	glm::vec3 cameraForward;
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
 	GLint mvp_location, vpos_location, vcol_location;
 
 private:
 	string ExePath();
 	static MainRunner* instance;
-	Mat16 cameraMVP;
+	glm::mat4 cameraP;
+	glm::mat4 cameraMVP;
 };
 
 int main(int argc, char* argv[]);

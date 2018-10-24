@@ -1,0 +1,4 @@
+﻿  Building Custom Rule C:/Users/Liz/TicTacToe/libraries/glm/glm/CMakeLists.txt
+  CMake does not need to re-run because C:/Users/Liz/TicTacToe/build/libraries/glm/glm/CMakeFiles/generate.stamp is up-to-date.
+  glm.cpp
+  glm_shared.vcxproj -> C:\Users\Liz\TicTacToe\build\libraries\glm\glm\Debug\glm_shared.dll

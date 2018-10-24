@@ -16,9 +16,9 @@ MainRunner::MainRunner()
 	instance = this;
 
 	//initialize one of each scene
-	scenes.push_back(new IntroScene(Vector3::z() + Vector3::y(), Vector3::z(), Vector3::one()));
-	scenes.push_back(new GameScene(Vector3::z(), Vector3::z(), Vector3::one()));
-	scenes.push_back(new EndScene(Vector3::z() - Vector3::y(), Vector3::z(), Vector3::one()));
+	scenes.push_back(new IntroScene(glm::vec3(0,1,0), glm::vec3(0,0,1), glm::vec3(1, 1, 1)));
+	scenes.push_back(new GameScene(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1)));
+	scenes.push_back(new EndScene(glm::vec3(0, -1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1)));
 }
 
 MainRunner::~MainRunner()
@@ -123,22 +123,19 @@ void MainRunner::TearDownScenes()
 void MainRunner::FocusOnScene(Scene *scene)
 {
 	//todo move camera over to new scene w/ a smooth glide
-	cameraPos = scene->Position() - Vector3::z() * 5;
+	cameraPos = scene->Position() - glm::vec3(0,0,5);
 	cameraForward = scene->Position() - cameraPos;
 }
 
 void MainRunner::UpdateCamera()
 {
-	static int counter = 0;
-	counter++;
-
-	cameraMVP.Update(cameraPos, cameraForward, Vector3::one());
+	cameraP = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	cameraMVP = cameraP * glm::lookAt(cameraPos, cameraPos + cameraForward, glm::vec3(0, 1, 0));
 }
 
 bool MainRunner::RunTests()
 {
-	bool res = Mat16::RunTests();
-	return res;
+	return true;
 }
 
 string MainRunner::ExePath() {

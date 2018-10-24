@@ -1,0 +1,4 @@
+﻿  Building Custom Rule C:/Users/Liz/TicTacToe/libraries/glm/test/ext/CMakeLists.txt
+  CMake does not need to re-run because C:/Users/Liz/TicTacToe/build/libraries/glm/test/ext/CMakeFiles/generate.stamp is up-to-date.
+  ext_matrix_relational.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(676,5): error MSB6006: "link.exe" exited with code 1.

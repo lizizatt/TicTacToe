@@ -1,0 +1,14 @@
+﻿  Building Custom Rule C:/Users/Liz/TicTacToe/libraries/glm/test/core/CMakeLists.txt
+  CMake does not need to re-run because C:/Users/Liz/TicTacToe/build/libraries/glm/test/core/CMakeFiles/generate.stamp is up-to-date.
+  core_setup_message.cpp
+  "GLM: version 0.9.9.2"
+  GLM: C++ 14
+  GLM: Visual C++ compiler detected
+  GLM: x86 32 bits with SSE2 instruction set build target
+  GLM: Windows platform detected
+  GLM: GLM_FORCE_SWIZZLE is undefined. swizzling functions or operators are disabled.
+  GLM: GLM_FORCE_SIZE_T_LENGTH is undefined. .length() returns a glm::length_t, a typedef of int following GLSL.
+  GLM: GLM_FORCE_UNRESTRICTED_GENTYPE is undefined. Follows strictly GLSL on valid function genTypes.
+  GLM: GLM_FORCE_DEPTH_ZERO_TO_ONE is undefined. Using negative one to one depth clip space.
+  GLM: GLM_FORCE_LEFT_HANDED is undefined. Using right handed coordinate system.
+  test-core_setup_message.vcxproj -> C:\Users\Liz\TicTacToe\build\libraries\glm\test\core\Debug\test-core_setup_message.exe

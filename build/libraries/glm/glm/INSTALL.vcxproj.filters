@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Liz\TicTacToe\build\CMakeFiles\f14c9637394ed9418b159b068d538908\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{F32EE172-26FE-32BA-BF43-02D50DF921B8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

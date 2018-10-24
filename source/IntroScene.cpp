@@ -1,17 +1,17 @@
 #include "IntroScene.h"
 
 
-IntroScene::IntroScene(Vector3 position, Vector3 forward, Vector3 scale)
+IntroScene::IntroScene(glm::vec3 position, glm::vec3 forward, glm::vec3 scale)
 {
 	this->position = position;
 	this->forward = forward;
 	this->scale = scale;
-	mvp.Update(position, forward, scale);
+	SetUpMVP();
 }
 
 void IntroScene::InitializeScene()
 {
-	cubes.push_back(std::make_shared<Cube>(Vector3::zero(), Vector3::z(), Vector3::one(), ""));
+	cubes.push_back(std::make_shared<Cube>());
 }
 
 void IntroScene::TearDownScene()
