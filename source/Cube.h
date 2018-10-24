@@ -15,7 +15,7 @@ class Cube
 public:
 	Cube();
 	Cube(Cube &c);
-	Cube(glm::vec3 pos, glm::vec3 forward, glm::vec3 scale, string textureFileName = "");
+	Cube(glm::vec3 pos, glm::mat3 rotation, glm::vec3 scale, string textureFileName = "");
 	~Cube();
 
 	void draw(glm::mat4 mvp);
@@ -25,9 +25,8 @@ public:
 
 private:
 	glm::vec3 pos;
-	glm::vec3 forward;
+	glm::mat3 rotation;
 	glm::vec3 scale;
-	glm::vec3 baseColor;
 	string textureFileName;
 
 	glm::mat4 mvp;

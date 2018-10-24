@@ -86,22 +86,26 @@ GLuint Cube::VertexArrayID;
 
 
 Cube::Cube()
-	: Cube(glm::vec3(0,0,0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1), "")
+	: Cube(glm::vec3(0,0,0), glm::mat3(1.0f), glm::vec3(1, 1, 1), "")
 {
 }
 	
 Cube::Cube(Cube &c)
-	: Cube(c.pos, c.forward, c.scale, c.textureFileName)
+	: Cube(c.pos, c.rotation, c.scale, c.textureFileName)
 {
 }
 
-Cube::Cube(glm::vec3 pos, glm::vec3 forward, glm::vec3 scale, string textureFileName)
-	: pos(pos), forward(forward), scale(scale), textureFileName(textureFileName)
+Cube::Cube(glm::vec3 pos, glm::mat3 rotation, glm::vec3 scale, string textureFileName)
+	: pos(pos), rotation(rotation), scale(scale), textureFileName(textureFileName)
 {
 	mvp = glm::mat4(1.0f);
-	glm::translate(mvp, pos);
-	//todo rotate
-	glm::scale(mvp, scale);
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			mvp[i][j] = rotation[i][j];
+		}
+	}
+	mvp = glm::translate(mvp, pos);
+	mvp = glm::scale(mvp, scale);
 }
 
 
@@ -113,14 +117,7 @@ void Cube::draw(glm::mat4 parentMVP)
 {
 	glm::mat4 targetMVP = parentMVP * mvp;
 
-	GLfloat* toWrite = (GLfloat*)malloc(16 * sizeof(GLfloat));
-	for (int i = 0; i < 16; i++) {
-		toWrite[i] = targetMVP[i / 4][i % 4];
-	}
-
-	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, toWrite);
-
-	delete toWrite;
+	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, &targetMVP[0][0]);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -170,6 +167,8 @@ void Cube::SetUpCube()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
 	cout << "Set up cube vertex and color buffer with glGetError " << glGetError() << "\n";
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Cube::TearDownCube()

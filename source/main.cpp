@@ -16,9 +16,9 @@ MainRunner::MainRunner()
 	instance = this;
 
 	//initialize one of each scene
-	scenes.push_back(new IntroScene(glm::vec3(0,1,0), glm::vec3(0,0,1), glm::vec3(1, 1, 1)));
-	scenes.push_back(new GameScene(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1)));
-	scenes.push_back(new EndScene(glm::vec3(0, -1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 1)));
+	scenes.push_back(new IntroScene(glm::vec3(0, 10, 0), glm::mat3(1.0f), glm::vec3(1, 1, 1)));
+	scenes.push_back(new GameScene(glm::vec3(0, 0, 0), glm::mat3(1.0f), glm::vec3(1, 1, 1)));
+	scenes.push_back(new EndScene(glm::vec3(0, -10, 0), glm::mat3(1.0f), glm::vec3(1, 1, 1)));
 }
 
 MainRunner::~MainRunner()
@@ -124,7 +124,7 @@ void MainRunner::FocusOnScene(Scene *scene)
 {
 	//todo move camera over to new scene w/ a smooth glide
 	cameraPos = scene->Position() - glm::vec3(0,0,5);
-	cameraForward = scene->Position() - cameraPos;
+	cameraForward = glm::vec3(0, 0, 1);
 }
 
 void MainRunner::UpdateCamera()
@@ -225,7 +225,7 @@ int main(int argc, char* argv[]) {
 			lastChangeScene = frameStart;
 		}
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		mainRunner.UpdateCamera();
 		mainRunner.DrawScenes();
