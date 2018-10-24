@@ -102,6 +102,7 @@ void MainRunner::SetUpScenes()
 {
 	for (int i = 0; i < scenes.size(); i++) {
 		scenes[i]->InitializeScene();
+		scenes[i]->LoadCubeTextures();
 	}
 	FocusOnScene(scenes[0]);
 }

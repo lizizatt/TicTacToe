@@ -33,6 +33,13 @@ public:
 		return rotation;
 	}
 
+	inline void LoadCubeTextures()
+	{
+		for (int i = 0; i < cubes.size(); i++) {
+			cubes[i]->setup();
+		}
+	}
+
 	inline void SetUpMVP()
 	{
 		mvp = glm::mat4(1.0f);

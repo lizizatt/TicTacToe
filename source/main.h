@@ -20,6 +20,8 @@ public:
 		return instance;
 	}
 
+	static string ExePath();
+
 public:
 	inline Scene* getScene(int i) {
 		return scenes[i];
@@ -30,6 +32,7 @@ public:
 	}
 	inline int getMVPLocation() { return mvp_location; }
 	inline glm::mat4 getPMatrix() { return cameraP; }
+	inline int getProgram() { return program; }
 
 public:
 	MainRunner();
@@ -52,7 +55,6 @@ private:
 	GLint mvp_location, vpos_location, vcol_location;
 
 private:
-	string ExePath();
 	static MainRunner* instance;
 	glm::mat4 cameraP;
 	glm::mat4 cameraMVP;
