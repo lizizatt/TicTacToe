@@ -18,7 +18,7 @@ public:
 	Cube(Vector3 pos, Vector3 forward, Vector3 scale, string textureFileName = "");
 	~Cube();
 
-	void draw(Mat16 mvp);
+	void draw(Mat16 &mvp);
 
 	static void SetUpCube();
 	static void TearDownCube();
@@ -35,5 +35,7 @@ private:
 	static GLuint VertexArrayID;
 	static GLuint vertexbuffer;
 	static GLuint colorbuffer;
+
+	bool once = false;
 };
 

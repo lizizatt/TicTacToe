@@ -5,7 +5,7 @@ EndScene::EndScene(Vector3 position, Vector3 forward, Vector3 scale)
 	this->position = position;
 	this->forward = forward;
 	this->scale = scale;
-	mvp = Mat16(position, forward, scale);
+	mvp.Update(position, forward, scale);
 }
 
 void EndScene::InitializeScene()

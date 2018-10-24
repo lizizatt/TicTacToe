@@ -16,9 +16,9 @@ public:
 	virtual void InitializeScene() = 0;
 	virtual void TearDownScene() = 0;
 
-	virtual inline void drawScene(Mat16 parentMVP)
+	virtual inline void drawScene(Mat16 &parentMVP)
 	{
-		Mat16 targetMVP = parentMVP * mvp;
+		Mat16 targetMVP = mvp * parentMVP;
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i]->draw(targetMVP);
 		}

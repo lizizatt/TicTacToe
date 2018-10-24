@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -15,13 +16,17 @@ MainRunner::MainRunner()
 	instance = this;
 
 	//initialize one of each scene
-	scenes.push_back(make_shared<IntroScene>(Vector3::z() + Vector3::x(), Vector3::z(), Vector3::one()));
-	scenes.push_back(make_shared<GameScene>(Vector3::z(), Vector3::z(), Vector3::one()));
-	scenes.push_back(make_shared<EndScene>(Vector3::z() - Vector3::x(), Vector3::z(), Vector3::one()));
+	scenes.push_back(new IntroScene(Vector3::z() + Vector3::y(), Vector3::z(), Vector3::one()));
+	scenes.push_back(new GameScene(Vector3::z(), Vector3::z(), Vector3::one()));
+	scenes.push_back(new EndScene(Vector3::z() - Vector3::y(), Vector3::z(), Vector3::one()));
 }
 
 MainRunner::~MainRunner()
 {
+	for (int i = 0; i < scenes.size(); i++) {
+		delete scenes[i];
+	}
+	scenes.clear();
 }
 
 void MainRunner::SetUpShaders()
@@ -98,7 +103,7 @@ void MainRunner::SetUpScenes()
 	for (int i = 0; i < scenes.size(); i++) {
 		scenes[i]->InitializeScene();
 	}
-	FocusOnScene(scenes[0].get());
+	FocusOnScene(scenes[0]);
 }
 
 void MainRunner::DrawScenes()
@@ -118,7 +123,7 @@ void MainRunner::TearDownScenes()
 void MainRunner::FocusOnScene(Scene *scene)
 {
 	//todo move camera over to new scene w/ a smooth glide
-	cameraPos = scene->Position() - Vector3::z();
+	cameraPos = scene->Position() - Vector3::z() * 5;
 	cameraForward = scene->Position() - cameraPos;
 }
 
@@ -127,8 +132,7 @@ void MainRunner::UpdateCamera()
 	static int counter = 0;
 	counter++;
 
-	//Vector3 mod = Vector3::y() * sin(counter * .001);
-	cameraMVP.Update(cameraPos, cameraForward * -1, Vector3::one());
+	cameraMVP.Update(cameraPos, cameraForward, Vector3::one());
 }
 
 bool MainRunner::RunTests()
@@ -208,7 +212,21 @@ int main(int argc, char* argv[]) {
 	//set up various arrays used to draw our only primitive, a textured cube
 	Cube::SetUpCube();
 
+	time_t lastChangeScene;
+	time(&lastChangeScene);
+	int curScene = 0;
+
 	while (!glfwWindowShouldClose(window)) {
+
+		time_t frameStart;
+		time(&frameStart);
+
+		if (frameStart - lastChangeScene > 3) {
+			curScene = (curScene + 1) % mainRunner.getNumScenes();
+			mainRunner.FocusOnScene(mainRunner.getScene(curScene));
+			cout << "Swapping scenes to " << curScene << "...\n";
+			lastChangeScene = frameStart;
+		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
 

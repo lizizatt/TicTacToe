@@ -105,13 +105,9 @@ Cube::~Cube()
 {
 }
 
-void Cube::draw(Mat16 parentMVP)
+void Cube::draw(Mat16 &parentMVP)
 {
 	Mat16 targetMVP = mvp * parentMVP;
-
-	cout << "---";
-	Mat16::print(targetMVP);
-	cout << "---";
 
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, targetMVP.matrix);
 
@@ -143,10 +139,13 @@ void Cube::draw(Mat16 parentMVP)
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 
-	static bool once = false;
 	if (!once) {
 		once = true;
 		cout << "Draw with glGetError" << glGetError() << "\n";
+
+		cout << "---\n";
+		Mat16::print(targetMVP);
+		cout << "---\n";
 	}
 }
 

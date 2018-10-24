@@ -137,20 +137,6 @@ public:
 
 		Mat16 res = m1 * m2;
 
-		/*
-		cout << "M1:\n";
-		Mat16::print(m1);
-
-		cout << "M2:\n";
-		Mat16::print(m2);
-
-		cout << "Res:\n";
-		Mat16::print(res);
-
-		cout << "Expected:\n";
-		Mat16::print(expected);
-		*/
-
 		return res == expected;
 	}
 };

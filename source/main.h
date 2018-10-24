@@ -19,6 +19,16 @@ public:
 	}
 
 public:
+	inline Scene* getScene(int i) {
+		return scenes[i];
+	}
+
+	inline int getNumScenes() {
+		return scenes.size();
+	}
+	inline int getMVPLocation() { return mvp_location; }
+
+public:
 	MainRunner();
 	~MainRunner();
 
@@ -31,10 +41,8 @@ public:
 
 	void FocusOnScene(Scene* scene);
 
-	inline int getMVPLocation() { return mvp_location; }
-
 private:
-	vector<shared_ptr<Scene>> scenes;
+	vector<Scene*> scenes;
 	Vector3 cameraPos;
 	Vector3 cameraForward;
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
