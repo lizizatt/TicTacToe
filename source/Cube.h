@@ -36,13 +36,17 @@ private:
 	GLuint textureID;
 	unsigned int texWidth;
 	unsigned int texHeight;
+	int texNum;
 	std::vector<unsigned char> texBuffer;
 	
 	static unordered_map<string, GLuint> textures;
+	static unordered_map<string, int> textureNums;
 	static GLuint VertexArrayID;
 	static GLuint vertexbuffer;
 	static GLuint uvbuffer;
 	static GLuint texSampler;
+	static int texNumCounter;
+	static GLuint layerLocation;
 
 	bool once = false;
 };

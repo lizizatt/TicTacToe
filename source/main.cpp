@@ -50,7 +50,6 @@ void MainRunner::SetUpShaders()
 	int InfoLogLength;
 
 	//vertex shader
-	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
 	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
 	glCompileShader(vertex_shader);
@@ -205,10 +204,10 @@ int main(int argc, char* argv[]) {
 
 	mainRunner.SetUpShaders();
 
-	mainRunner.SetUpScenes();
-
 	//set up various arrays used to draw our only primitive, a textured cube
 	Cube::SetUpCube();
+
+	mainRunner.SetUpScenes();
 
 	time_t lastChangeScene;
 	time(&lastChangeScene);
