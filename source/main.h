@@ -8,7 +8,13 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "TicTacToeRunner.h"
+#include <chrono>
 
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using namespace std::literals::chrono_literals;
 
 class MainRunner
 {
@@ -55,7 +61,7 @@ public:
 
 	void raycastFromScreenPoint(double x, double y);
 
-	void FocusOnScene(Scene* scene);
+	void FocusOnScene(Scene* scene, bool instant = false);
 
 	void StartGame();
 	void PlacePiece(int spot);
@@ -75,6 +81,13 @@ private:
 	glm::mat4 cameraMVP;
 
 	TicTacToeRunner ttt;
+
+	time_point<Clock> start; 
+	time_point<Clock> end;
+	float seconds = 2.0f;
+	glm::vec3 destinationPos;
+	glm::vec3 destinationDir;
+	bool moving = false;
 };
 
 int main(int argc, char* argv[]);

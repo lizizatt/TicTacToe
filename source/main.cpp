@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <time.h>
 
 using namespace std;
 
@@ -103,7 +102,7 @@ void MainRunner::SetUpScenes()
 		scenes[i]->InitializeScene();
 		scenes[i]->LoadCubeTextures();
 	}
-	FocusOnScene(scenes[0]);
+	FocusOnScene(scenes[0], true);
 }
 
 void MainRunner::DrawScenes()
@@ -120,17 +119,37 @@ void MainRunner::TearDownScenes()
 	}
 }
 
-void MainRunner::FocusOnScene(Scene *scene)
+void MainRunner::FocusOnScene(Scene *scene, bool instant)
 {
-	//todo move camera over to new scene w/ a smooth glide
-	cameraPos = scene->Position() - glm::vec3(0,0,5);
-	cameraForward = glm::vec3(0, 0, 1);
-
-	UpdateCamera();
+	if (instant) {
+		cameraPos = scene->Position() - glm::vec3(0, 0, 5);
+		cameraForward = glm::vec3(0, 0, 1);
+	}
+	else {
+		destinationPos = scene->Position() - glm::vec3(0, 0, 5);
+		destinationDir = glm::vec3(0, 0, 1);
+		start = Clock::now();
+		end = Clock::now() + chrono::seconds(3);
+		moving = true;
+	}
 }
 
 void MainRunner::UpdateCamera()
 {
+	time_point<Clock> now = Clock::now();
+	if (moving && duration_cast<milliseconds>(now - end).count() < 0) {
+		milliseconds diffES = duration_cast<milliseconds>(end - start);
+		milliseconds diffNS = duration_cast<milliseconds>(now - start);
+		float fraction = diffNS.count() == 0 ? 0 : (float) diffNS.count() / (float) diffES.count();
+		cameraPos = cameraPos + (destinationPos - cameraPos) * fraction;
+		cameraForward = cameraForward + (destinationDir - cameraForward) * fraction;
+	}
+	else if (moving) {
+		cameraPos = destinationPos;
+		cameraForward = destinationDir;
+		moving = false;
+	}
+
 	cameraP = glm::perspective(glm::radians(FOV/2), (float) SCREENWIDTH / (float) SCREENHEIGHT, NEARCLIP, FARCLIP);
 	cameraMVP = cameraP * glm::lookAt(cameraPos, cameraPos + cameraForward, glm::vec3(0, 1, 0));
 }
@@ -171,7 +190,6 @@ void MainRunner::raycastFromScreenPoint(double x, double y)
 	float FOVX = FOV * (float)SCREENWIDTH / (float)SCREENHEIGHT;
 	float rightAngleInDegs = FOVX / 2.0f * xD;
 	float upAngleInDegs = -FOV / 2.0f * yD;
-
 
 	float rightContrb = tan(glm::radians(rightAngleInDegs));
 	float upContrib = tan(glm::radians(upAngleInDegs));
@@ -291,6 +309,7 @@ int main(int argc, char* argv[]) {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		mainRunner.UpdateCamera();
 		mainRunner.DrawScenes();
 
 		glfwSwapBuffers(window);
