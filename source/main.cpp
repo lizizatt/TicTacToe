@@ -200,12 +200,22 @@ void MainRunner::PlacePiece(int spot)
 	boardString[spot] = 'X';
 	ttt.updateBoardString(boardString);
 
-	cout << "Board string before ai move: " << boardString << "\n";
+	cout << "Board string before ai move: <" << boardString << ">\n";
 
 	string aiChosenBoardString = ttt.getAIMove();
 	((GameScene*)scenes[1])->RenderBoard(aiChosenBoardString);
 
-	cout << "Board string after ai move: " << boardString << "\n";
+	cout << "Board string after ai move: <" << aiChosenBoardString << ">\n";
+
+	if (ttt.isGameOver()) {
+		FinishGame();
+	}
+}
+
+void MainRunner::FinishGame()
+{
+	FocusOnScene(scenes[2]);
+	((EndScene*)scenes[2])->setPlayerWon(ttt.didWin('X'));
 }
 
 namespace {

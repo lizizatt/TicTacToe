@@ -59,6 +59,7 @@ public:
 
 	void StartGame();
 	void PlacePiece(int spot);
+	void FinishGame();
 
 private:
 	vector<Scene*> scenes;
