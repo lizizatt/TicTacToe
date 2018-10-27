@@ -194,6 +194,7 @@ void Cube::draw(glm::mat4 parentMVP)
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (!once) {
 		once = true;
