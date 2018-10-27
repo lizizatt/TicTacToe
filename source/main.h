@@ -7,6 +7,7 @@
 #include "EndScene.h"
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
+#include "TicTacToeRunner.h"
 
 
 class MainRunner
@@ -58,6 +59,7 @@ public:
 	void FocusOnScene(Scene* scene);
 
 	void StartGame();
+	void PlacePiece(int spot);
 
 private:
 	vector<Scene*> scenes;
@@ -73,6 +75,8 @@ private:
 
 	int mouseX, mouseY;
 	bool leftButtonDown;
+
+	TicTacToeRunner ttt;
 };
 
 int main(int argc, char* argv[]);

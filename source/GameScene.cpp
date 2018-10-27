@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "main.h"
 
 GameScene::GameScene(glm::vec3 position, glm::mat3 rotation, glm::vec3 scale)
 {
@@ -24,9 +25,35 @@ void GameScene::InitializeScene()
 
 	for (int i = 0; i < cubes.size(); i++) {
 		cubes[i]->setFace(Cube::Face::logo);
+		cubes[i]->addListener(this);
 	}
 }
 
 void GameScene::TearDownScene()
 {
+}
+
+void GameScene::OnClick(Cube *c)
+{
+	for (int i = 0; i < cubes.size(); i++) {
+		if (cubes[i].get() == c) {
+			MainRunner::getInstance()->PlacePiece(i);
+			break;
+		}
+	}
+}
+
+void GameScene::RenderBoard(string board)
+{
+	for (int i = 0; i < 9; i++) {
+		if (board[i] == 'X') {
+			cubes[i]->setFace(Cube::Face::X);
+			continue;
+		}
+		if (board[i] == 'O') {
+			cubes[i]->setFace(Cube::Face::O);
+			continue;
+		}
+		cubes[i]->setFace(Cube::Face::logo);
+	}
 }

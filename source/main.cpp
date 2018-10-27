@@ -194,6 +194,17 @@ void MainRunner::raycastFromScreenPoint(double x, double y)
 void MainRunner::StartGame()
 {
 	FocusOnScene(scenes[1]);
+	ttt.StartGame();
+}
+
+void MainRunner::PlacePiece(int spot)
+{
+	string boardString = ttt.getCurrentBoardString();
+	boardString[spot] = 'X';
+	ttt.updateBoardString(boardString);
+
+	string aiChosenBoardString = ttt.getAIMove();
+	((GameScene*)scenes[1])->RenderBoard(aiChosenBoardString);
 }
 
 namespace {
@@ -271,21 +282,7 @@ int main(int argc, char* argv[]) {
 
 	mainRunner.SetUpScenes();
 
-	time_t lastChangeScene;
-	time(&lastChangeScene);
-	int curScene = 0;
-
 	while (!glfwWindowShouldClose(window)) {
-
-		time_t frameStart;
-		time(&frameStart);
-
-		if (frameStart - lastChangeScene > 3) {
-			curScene = (curScene + 1) % mainRunner.getNumScenes();
-			//mainRunner.FocusOnScene(mainRunner.getScene(curScene));
-			cout << "Swapping scenes to " << curScene << "...\n";
-			lastChangeScene = frameStart;
-		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

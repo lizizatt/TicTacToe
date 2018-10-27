@@ -181,6 +181,9 @@ void Cube::draw(glm::mat4 parentMVP)
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -223,7 +226,6 @@ void Cube::SetUpCube()
 	glEnable(GL_BLEND); 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	texSampler = glGetUniformLocation(MainRunner::getInstance()->getProgram(), "texSampler");
 
 	//decode texture and set up opengl texture
@@ -243,8 +245,8 @@ void Cube::SetUpCube()
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
 		glGenerateMipmap(GL_TEXTURE_2D);
-		cout << "Set up texture with glGetError() " << glGetError() << "\n";
 
 		glUniform1i(texSampler, 0);
 	}
