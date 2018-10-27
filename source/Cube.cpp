@@ -112,6 +112,8 @@ Cube::Cube(glm::vec3 pos, glm::vec3 scale, glm::vec3 scenePos, glm::vec3 sceneSc
 	mvp = glm::translate(mvp, pos);
 	mvp = glm::scale(mvp, scale);
 	mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 0, 1));
+
+	start = Clock::now();
 }
 
 
@@ -160,6 +162,11 @@ void Cube::setFace(Face face)
 
 void Cube::draw(glm::mat4 parentMVP)
 {
+	time_point<Clock> now = Clock::now();
+	milliseconds diffES = duration_cast<milliseconds>(now - start);
+	glm::vec3 rockAxis = glm::vec3(0, 0, 1);
+	glm::mat4 mvp = glm::rotate<float>(this->mvp, rockMagnitude * sin((float)diffES.count() / (float)rockPeriodMS * 2.0f * 3.1415f), rockAxis);
+
 	targetMVP = parentMVP * mvp;
 
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, &targetMVP[0][0]);

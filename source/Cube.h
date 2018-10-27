@@ -9,6 +9,13 @@
 #include <gtc/matrix_transform.hpp>
 #include <vector>
 #include <unordered_map>
+#include <chrono>
+
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using namespace std::literals::chrono_literals;
 
 using namespace std;
 
@@ -77,5 +84,9 @@ private:
 	glm::vec3 sceneScale;
 
 	list<Listener*> listeners;
+
+	time_point<Clock> start;
+	long rockPeriodMS = 6000;
+	float rockMagnitude = .05;
 };
 

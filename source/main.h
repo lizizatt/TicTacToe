@@ -8,13 +8,6 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "TicTacToeRunner.h"
-#include <chrono>
-
-using Clock = std::chrono::steady_clock;
-using std::chrono::time_point;
-using std::chrono::duration_cast;
-using std::chrono::milliseconds;
-using namespace std::literals::chrono_literals;
 
 class MainRunner
 {
