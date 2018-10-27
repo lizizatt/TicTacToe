@@ -12,7 +12,7 @@ IntroScene::IntroScene(glm::vec3 position, glm::mat3 rotation, glm::vec3 scale)
 
 void IntroScene::InitializeScene()
 {
-	cubes.push_back(std::make_shared<Cube>(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), position, scale));
+	cubes.push_back(std::make_shared<Cube>(glm::vec3(0, .5, 0), glm::vec3(1.25, 1.25, 1.25), position, scale));
 	cubes.push_back(std::make_shared<Cube>(glm::vec3(0, -1, 0), glm::vec3(.5, .5, .5), position, scale));
 
 	cubes[0]->setFace(Cube::Face::logo);

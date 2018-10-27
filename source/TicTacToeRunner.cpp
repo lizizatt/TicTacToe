@@ -18,12 +18,16 @@ void TicTacToeRunner::updateBoardString(string board)
 
 string TicTacToeRunner::getAIMove()
 {
+	vector<int> choices;
 	for (int i = 0; i < 9; i++) {
 		if (boardString[i] == ' ') {
-			boardString[i] = 'O';
-			return boardString;
+			choices.push_back(i);
 		}
 	}
+	if (choices.size() == 0) {
+		return boardString;
+	}
+	boardString[choices.at(rand() % choices.size())] = 'O';
 	return boardString;
 }
 

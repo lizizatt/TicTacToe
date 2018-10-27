@@ -226,6 +226,7 @@ void MainRunner::PlacePiece(int spot)
 	cout << "Board string after ai move: <" << aiChosenBoardString << ">\n";
 
 	if (ttt.isGameOver()) {
+		
 		FinishGame();
 	}
 }
