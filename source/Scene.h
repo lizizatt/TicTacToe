@@ -52,6 +52,13 @@ public:
 		mvp = glm::scale(mvp, scale);
 	}
 
+	inline void RaycastClickAgainstScene(glm::vec3 rayPos, glm::vec3 ray)
+	{
+		for (int i = 0; i < cubes.size(); i++) {
+			cubes[i]->raycastClick(rayPos, ray);
+		}
+	}
+
 protected:
 	vector<shared_ptr<Cube>> cubes;
 	glm::vec3 position;

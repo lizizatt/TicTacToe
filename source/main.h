@@ -13,6 +13,11 @@ class MainRunner
 {
 public:
 	const bool RUN_TESTS = true;
+	const float FOV = 75.0f;
+	const int SCREENWIDTH = 1280;
+	const int SCREENHEIGHT = 720;
+	const float NEARCLIP = 1000.0f;
+	const float FARCLIP = .01f;
 
 public:
 	static inline MainRunner* getInstance()
@@ -45,7 +50,14 @@ public:
 	void UpdateCamera();
 	bool RunTests();
 
+	void mouseClick(GLFWwindow* window, int button, int action, int mods);
+	void mouseMove(GLFWwindow* window, double x, double y);
+
+	void raycastFromScreenPoint(double x, double y);
+
 	void FocusOnScene(Scene* scene);
+
+	void StartGame();
 
 private:
 	vector<Scene*> scenes;
@@ -58,6 +70,11 @@ private:
 	static MainRunner* instance;
 	glm::mat4 cameraP;
 	glm::mat4 cameraMVP;
+
+	int mouseX, mouseY;
+	bool leftButtonDown;
 };
 
 int main(int argc, char* argv[]);
+static void mouseClick(GLFWwindow* window, int button, int action, int mods);
+static void mouseMove(GLFWwindow* window, double x, double y);

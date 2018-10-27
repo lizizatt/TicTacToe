@@ -125,11 +125,12 @@ void MainRunner::FocusOnScene(Scene *scene)
 	//todo move camera over to new scene w/ a smooth glide
 	cameraPos = scene->Position() - glm::vec3(0,0,5);
 	cameraForward = glm::vec3(0, 0, 1);
+	UpdateCamera();
 }
 
 void MainRunner::UpdateCamera()
 {
-	cameraP = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	cameraP = glm::perspective(glm::radians(FOV/2), (float) SCREENWIDTH / (float) SCREENHEIGHT, NEARCLIP, FARCLIP);
 	cameraMVP = cameraP * glm::lookAt(cameraPos, cameraPos + cameraForward, glm::vec3(0, 1, 0));
 }
 
@@ -143,6 +144,56 @@ string MainRunner::ExePath() {
 	GetModuleFileName(NULL, buffer, MAX_PATH);
 	string::size_type pos = string(buffer).find_last_of("\\/");
 	return string(buffer).substr(0, pos);
+}
+
+void MainRunner::mouseClick(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		if (GLFW_PRESS == action) {
+			leftButtonDown = true;
+		}
+		else if (GLFW_RELEASE == action) {
+			leftButtonDown = false;
+			raycastFromScreenPoint(mouseX, mouseY);
+		}
+	}
+}
+
+void MainRunner::mouseMove(GLFWwindow* window, double x, double y)
+{
+	mouseX = x;
+	mouseY = y;
+}
+
+void MainRunner::raycastFromScreenPoint(double x, double y)
+{
+	double xD = -SCREENWIDTH / 2 + x;
+	double yD = -SCREENWIDTH / 2 + y;
+
+	glm::vec3 up = glm::vec3(0, 1, 0);
+	glm::vec3 right = glm::normalize(glm::cross(cameraForward, up));
+
+	glm::vec3 pointOnCameraPlane = cameraPos + cameraForward;
+
+	float rightAngleInDegs = FOV / 2.0f * xD / SCREENWIDTH;
+	float upAngleInDegs = FOV / 2.0f * yD / SCREENWIDTH;
+
+	float rightContrb = tan(glm::radians(rightAngleInDegs));
+	float upContrib = tan(glm::radians(upAngleInDegs));
+
+	pointOnCameraPlane += rightContrb * right + upContrib * up;
+
+	glm::vec3 ray = pointOnCameraPlane - cameraPos;
+	ray = glm::normalize(ray);
+
+	for (int i = 0; i < scenes.size(); i++) {
+		scenes[i]->RaycastClickAgainstScene(cameraPos, ray);
+	}
+}
+
+void MainRunner::StartGame()
+{
+	FocusOnScene(scenes[1]);
 }
 
 namespace {
@@ -183,6 +234,15 @@ namespace {
    }
 }
 
+static void mouseClick(GLFWwindow* window, int button, int action, int mods)
+{
+	MainRunner::getInstance()->mouseClick(window, button, action, mods);
+}
+
+static void mouseMove(GLFWwindow* window, double x, double y)
+{
+	MainRunner::getInstance()->mouseMove(window, x, y);
+}
 
 int main(int argc, char* argv[]) {
 
@@ -199,6 +259,9 @@ int main(int argc, char* argv[]) {
 	if (!window) {
 		return 0;
 	}
+
+	glfwSetCursorPosCallback(window, mouseMove);
+	glfwSetMouseButtonCallback(window, mouseClick);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -219,14 +282,13 @@ int main(int argc, char* argv[]) {
 
 		if (frameStart - lastChangeScene > 3) {
 			curScene = (curScene + 1) % mainRunner.getNumScenes();
-			mainRunner.FocusOnScene(mainRunner.getScene(curScene));
+			//mainRunner.FocusOnScene(mainRunner.getScene(curScene));
 			cout << "Swapping scenes to " << curScene << "...\n";
 			lastChangeScene = frameStart;
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mainRunner.UpdateCamera();
 		mainRunner.DrawScenes();
 
 		glfwSwapBuffers(window);

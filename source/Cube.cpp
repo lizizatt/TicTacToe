@@ -105,8 +105,8 @@ Cube::Cube(Cube &c)
 {
 }
 
-Cube::Cube(glm::vec3 pos, glm::vec3 scale)
-	: pos(pos), scale(scale)
+Cube::Cube(glm::vec3 pos, glm::vec3 scale, glm::vec3 scenePos, glm::vec3 sceneScale)
+	: pos(pos), scale(scale), scenePos(scenePos), sceneScale(sceneScale)
 {
 	mvp = glm::mat4(1.0f);
 	mvp = glm::translate(mvp, pos);
@@ -156,7 +156,7 @@ void Cube::setFace(Face face)
 
 void Cube::draw(glm::mat4 parentMVP)
 {
-	glm::mat4 targetMVP = parentMVP * mvp;
+	targetMVP = parentMVP * mvp;
 
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, &targetMVP[0][0]);
 
@@ -200,6 +200,7 @@ void Cube::setup()
 
 void Cube::SetUpCube()
 {
+	//generate vertex and uv arrays
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
@@ -225,7 +226,7 @@ void Cube::SetUpCube()
 
 	texSampler = glGetUniformLocation(MainRunner::getInstance()->getProgram(), "texSampler");
 
-	//decode texture
+	//decode texture and set up opengl texture
 	string fullPath = MainRunner::ExePath() + "\\" + textureFileName;
 	unsigned error = lodepng::decode(texBuffer, texWidth, texHeight, fullPath.c_str());
 	if (error) {
@@ -251,4 +252,22 @@ void Cube::SetUpCube()
 
 void Cube::TearDownCube()
 {
+}
+
+void Cube::raycastClick(glm::vec3 rayPos, glm::vec3 ray)
+{
+	glm::vec3 worldP = pos + scenePos;
+	glm::vec3 worldS = scale * sceneScale;
+
+	//want to know if rayPos->ray ever comes within a scaled sphere according to the above vector of the center point of the sphere
+	//p = rayPos + t * (ray)
+	float t = -1 * glm::dot(rayPos - worldP, ray);
+	glm::vec3 p = rayPos + ray * t;
+	glm::vec3 diff = p - worldP;
+
+	if (diff[0] < scale[0] && diff[1] < scale[1] && diff[2] < scale[2]) {
+		for (Listener* l : listeners) {
+			l->OnClick(this);
+		}
+	}
 }
