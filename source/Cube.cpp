@@ -121,6 +121,10 @@ Cube::~Cube()
 
 void Cube::setFace(Face face)
 {
+	mvp = glm::mat4(1.0f);
+	mvp = glm::translate(mvp, pos);
+	mvp = glm::scale(mvp, scale);
+	mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 0, 1));
 	switch (face) {
 		case 0: {
 			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f, glm::vec3(0, 1, 0));
@@ -221,6 +225,9 @@ void Cube::SetUpCube()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -266,7 +273,7 @@ void Cube::raycastClick(glm::vec3 rayPos, glm::vec3 ray)
 	glm::vec3 p = rayPos + ray * t;
 	glm::vec3 diff = p - worldP;
 
-	if (diff[0] < scale[0] && diff[1] < scale[1] && diff[2] < scale[2]) {
+	if ((abs(diff[0]) < worldS[0]) && (abs(diff[1]) < worldS[1]) && (abs(diff[2]) < worldS[2])) {
 		for (Listener* l : listeners) {
 			l->OnClick(this);
 		}

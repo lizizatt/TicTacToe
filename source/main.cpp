@@ -160,16 +160,18 @@ void MainRunner::mouseClick(GLFWwindow* window, int button, int action, int mods
 
 void MainRunner::raycastFromScreenPoint(double x, double y)
 {
-	double xD = -SCREENWIDTH / 2 + x;
-	double yD = -SCREENWIDTH / 2 + y;
+	double xD = (x - (SCREENWIDTH / 2)) / SCREENWIDTH;
+	double yD = (y - (SCREENHEIGHT / 2)) / SCREENHEIGHT;
 
 	glm::vec3 up = glm::vec3(0, 1, 0);
 	glm::vec3 right = glm::normalize(glm::cross(cameraForward, up));
 
 	glm::vec3 pointOnCameraPlane = cameraPos + cameraForward;
 
-	float rightAngleInDegs = FOV / 2.0f * xD / SCREENWIDTH;
-	float upAngleInDegs = FOV / 2.0f * yD / SCREENWIDTH;
+	float FOVX = FOV * (float)SCREENWIDTH / (float)SCREENHEIGHT;
+	float rightAngleInDegs = FOVX / 2.0f * xD;
+	float upAngleInDegs = -FOV / 2.0f * yD;
+
 
 	float rightContrb = tan(glm::radians(rightAngleInDegs));
 	float upContrib = tan(glm::radians(upAngleInDegs));
@@ -188,6 +190,8 @@ void MainRunner::StartGame()
 {
 	FocusOnScene(scenes[1]);
 	ttt.StartGame();
+	((GameScene*)scenes[1])->RenderBoard(ttt.getCurrentBoardString());
+	cout << "Starting game... \n";
 }
 
 void MainRunner::PlacePiece(int spot)
@@ -196,8 +200,12 @@ void MainRunner::PlacePiece(int spot)
 	boardString[spot] = 'X';
 	ttt.updateBoardString(boardString);
 
+	cout << "Board string before ai move: " << boardString << "\n";
+
 	string aiChosenBoardString = ttt.getAIMove();
 	((GameScene*)scenes[1])->RenderBoard(aiChosenBoardString);
+
+	cout << "Board string after ai move: " << boardString << "\n";
 }
 
 namespace {

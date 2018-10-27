@@ -70,6 +70,7 @@ private:
 private:
 	static MainRunner* instance;
 	glm::mat4 cameraP;
+	glm::mat4 cameraV;
 	glm::mat4 cameraMVP;
 
 	TicTacToeRunner ttt;
