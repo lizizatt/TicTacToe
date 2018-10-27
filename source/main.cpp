@@ -129,7 +129,7 @@ void MainRunner::FocusOnScene(Scene *scene, bool instant)
 		destinationPos = scene->Position() - glm::vec3(0, 0, 5);
 		destinationDir = glm::vec3(0, 0, 1);
 		start = Clock::now();
-		end = Clock::now() + chrono::seconds(3);
+		end = Clock::now() + chrono::milliseconds(MS_TO_FLY);
 		moving = true;
 	}
 }

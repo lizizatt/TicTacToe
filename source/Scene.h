@@ -4,8 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <string>
-#include "Cube.h"
 #include <vector>
+#include "Cube.h"
 
 using namespace std;
 

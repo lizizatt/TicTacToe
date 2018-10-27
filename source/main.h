@@ -1,3 +1,4 @@
+#pragma once
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -8,13 +9,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "TicTacToeRunner.h"
-#include <chrono>
 
-using Clock = std::chrono::steady_clock;
-using std::chrono::time_point;
-using std::chrono::duration_cast;
-using std::chrono::milliseconds;
-using namespace std::literals::chrono_literals;
 
 class MainRunner
 {
@@ -25,6 +20,7 @@ public:
 	const int SCREENHEIGHT = 720;
 	const float NEARCLIP = 1000.0f;
 	const float FARCLIP = .01f;
+	const long MS_TO_FLY = 3000;
 
 public:
 	static inline MainRunner* getInstance()

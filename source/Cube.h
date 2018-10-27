@@ -9,12 +9,20 @@
 #include <gtc/matrix_transform.hpp>
 #include <vector>
 #include <unordered_map>
+#include <chrono>
 
 using namespace std;
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using namespace std::literals::chrono_literals;
 
 class Cube
 {
 public:
+	const long MS_TO_SPIN = 100;
+
 	enum Face
 	{
 		logo,
@@ -49,6 +57,8 @@ public:
 
 	void raycastClick(glm::vec3 rayPos, glm::vec3 ray);
 
+	void updateRotation();
+
 	inline void addListener(Listener *l) { listeners.push_back(l); }
 	inline void removeListener(Listener *l) { listeners.remove(l); }
 
@@ -76,6 +86,14 @@ private:
 	glm::vec3 scenePos;
 	glm::vec3 sceneScale;
 
+	time_point<Clock> start;
+	time_point<Clock> end;
+	bool moving = false;
+	Face destFace;
+
 	list<Listener*> listeners;
+
+private:
+	void setFaceHelper(Face face, float fractional = 1.0f);
 };
 

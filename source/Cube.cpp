@@ -1,3 +1,4 @@
+
 #include "Cube.h"
 #include "main.h"
 #include <iostream>
@@ -119,37 +120,51 @@ Cube::~Cube()
 {
 }
 
+void Cube::updateRotation()
+{
+
+}
+
 void Cube::setFace(Face face)
+{
+	destFace = face;
+	start = Clock::now();
+	end = Clock::now() + chrono::milliseconds(MS_TO_SPIN);
+	moving = true;
+}
+
+void Cube::setFaceHelper(Face face, float fractional)
 {
 	mvp = glm::mat4(1.0f);
 	mvp = glm::translate(mvp, pos);
 	mvp = glm::scale(mvp, scale);
 	mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 0, 1));
+
 	switch (face) {
 		case 0: {
-			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f * fractional, glm::vec3(0, 1, 0));
 			break;
 		}
 		case 1: {
-			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f * fractional, glm::vec3(0, 1, 0));
 			break;
 		}
 		case 2: {
 			break;
 		}
 		case 3: {
-			mvp = glm::rotate<float>(mvp, 3.1415f, glm::vec3(0, 1, 0));
-			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f, glm::vec3(0, 0, 1));
+			mvp = glm::rotate<float>(mvp, 3.1415f * fractional, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f * fractional, glm::vec3(0, 0, 1));
 			break;
 		}
 		case 4: {
-			mvp = glm::rotate<float>(mvp, 3.1415f / 2, glm::vec3(1, 0, 0));
-			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2 * fractional, glm::vec3(1, 0, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f * fractional, glm::vec3(0, 1, 0));
 			break;
 		}
 		case 5: {
-			mvp = glm::rotate<float>(mvp, -3.1415f / 2, glm::vec3(1, 0, 0));
-			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2 * fractional, glm::vec3(1, 0, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f * fractional, glm::vec3(0, 1, 0));
 			break;
 		}
 		default: {
@@ -160,6 +175,19 @@ void Cube::setFace(Face face)
 
 void Cube::draw(glm::mat4 parentMVP)
 {
+	time_point<Clock> now = Clock::now();
+	if (moving && duration_cast<milliseconds>(now - end).count() < 0) {
+		milliseconds diffES = duration_cast<milliseconds>(end - start);
+		milliseconds diffNS = duration_cast<milliseconds>(now - start);
+		float fraction = diffNS.count() == 0 ? 0 : (float)diffNS.count() / (float)diffES.count();
+		setFaceHelper(destFace, fraction);
+	}
+	else if (moving) {
+		setFaceHelper(destFace, 1.0f);
+		face = destFace;
+		moving = false;
+	}
+
 	targetMVP = parentMVP * mvp;
 
 	glUniformMatrix4fv(MainRunner::getInstance()->getMVPLocation(), 1, GL_FALSE, &targetMVP[0][0]);
