@@ -52,7 +52,6 @@ public:
 	bool RunTests();
 
 	void mouseClick(GLFWwindow* window, int button, int action, int mods);
-	void mouseMove(GLFWwindow* window, double x, double y);
 
 	void raycastFromScreenPoint(double x, double y);
 
@@ -73,12 +72,8 @@ private:
 	glm::mat4 cameraP;
 	glm::mat4 cameraMVP;
 
-	int mouseX, mouseY;
-	bool leftButtonDown;
-
 	TicTacToeRunner ttt;
 };
 
 int main(int argc, char* argv[]);
 static void mouseClick(GLFWwindow* window, int button, int action, int mods);
-static void mouseMove(GLFWwindow* window, double x, double y);

@@ -125,6 +125,7 @@ void MainRunner::FocusOnScene(Scene *scene)
 	//todo move camera over to new scene w/ a smooth glide
 	cameraPos = scene->Position() - glm::vec3(0,0,5);
 	cameraForward = glm::vec3(0, 0, 1);
+
 	UpdateCamera();
 }
 
@@ -149,20 +150,12 @@ string MainRunner::ExePath() {
 void MainRunner::mouseClick(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
-		if (GLFW_PRESS == action) {
-			leftButtonDown = true;
-		}
-		else if (GLFW_RELEASE == action) {
-			leftButtonDown = false;
-			raycastFromScreenPoint(mouseX, mouseY);
+		if (GLFW_RELEASE == action) {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			raycastFromScreenPoint(xpos, ypos);
 		}
 	}
-}
-
-void MainRunner::mouseMove(GLFWwindow* window, double x, double y)
-{
-	mouseX = x;
-	mouseY = y;
 }
 
 void MainRunner::raycastFromScreenPoint(double x, double y)
@@ -250,11 +243,6 @@ static void mouseClick(GLFWwindow* window, int button, int action, int mods)
 	MainRunner::getInstance()->mouseClick(window, button, action, mods);
 }
 
-static void mouseMove(GLFWwindow* window, double x, double y)
-{
-	MainRunner::getInstance()->mouseMove(window, x, y);
-}
-
 int main(int argc, char* argv[]) {
 
 
@@ -271,7 +259,6 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	glfwSetCursorPosCallback(window, mouseMove);
 	glfwSetMouseButtonCallback(window, mouseClick);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -181,9 +181,10 @@ void Cube::draw(glm::mat4 parentMVP)
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
-	
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
+	glUniform1i(texSampler, 0);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -247,8 +248,6 @@ void Cube::SetUpCube()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glUniform1i(texSampler, 0);
 	}
 }
 
