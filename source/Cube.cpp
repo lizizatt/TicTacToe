@@ -86,29 +86,32 @@ GLuint Cube::vertexbuffer;
 GLuint Cube::uvbuffer;
 GLuint Cube::texSampler;
 GLuint Cube::VertexArrayID;
-unordered_map<string, GLuint> Cube::textures;
+string Cube::textureFileName = "TTT.png";
+unsigned int Cube::texWidth;
+unsigned int Cube::texHeight;
+std::vector<unsigned char> Cube::texBuffer;
+GLuint Cube::textureID;
 
 Cube::Cube()
-	: Cube(glm::vec3(0,0,0), glm::mat3(1.0f), glm::vec3(1, 1, 1), "white.png")
+	: Cube(glm::vec3(0,0,0), glm::vec3(1, 1, 1))
 {
+	mvp = glm::mat4(1.0f);
+	mvp = glm::translate(mvp, pos);
+	mvp = glm::scale(mvp, scale);
 }
 	
 Cube::Cube(Cube &c)
-	: Cube(c.pos, c.rotation, c.scale, c.textureFileName)
+	: Cube(c.pos, c.scale)
 {
 }
 
-Cube::Cube(glm::vec3 pos, glm::mat3 rotation, glm::vec3 scale, string textureFileName)
-	: pos(pos), rotation(rotation), scale(scale), textureFileName(textureFileName)
+Cube::Cube(glm::vec3 pos, glm::vec3 scale)
+	: pos(pos), scale(scale)
 {
 	mvp = glm::mat4(1.0f);
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			mvp[i][j] = rotation[i][j];
-		}
-	}
 	mvp = glm::translate(mvp, pos);
 	mvp = glm::scale(mvp, scale);
+	mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 0, 1));
 }
 
 
@@ -116,6 +119,40 @@ Cube::~Cube()
 {
 }
 
+void Cube::setFace(Face face)
+{
+	switch (face) {
+		case 0: {
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			break;
+		}
+		case 1: {
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			break;
+		}
+		case 2: {
+			break;
+		}
+		case 3: {
+			mvp = glm::rotate<float>(mvp, 3.1415f, glm::vec3(0, 1, 0));
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2.0f, glm::vec3(0, 0, 1));
+			break;
+		}
+		case 4: {
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2, glm::vec3(1, 0, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			break;
+		}
+		case 5: {
+			mvp = glm::rotate<float>(mvp, -3.1415f / 2, glm::vec3(1, 0, 0));
+			mvp = glm::rotate<float>(mvp, 3.1415f / 2.0f, glm::vec3(0, 1, 0));
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+}
 
 void Cube::draw(glm::mat4 parentMVP)
 {
@@ -134,8 +171,6 @@ void Cube::draw(glm::mat4 parentMVP)
 		(void*)0            // array buffer offset
 	);
 
-	glGetError();
-
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glVertexAttribPointer(
@@ -146,11 +181,6 @@ void Cube::draw(glm::mat4 parentMVP)
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glUniform1i(texSampler, 0);
-
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -165,28 +195,6 @@ void Cube::draw(glm::mat4 parentMVP)
 
 void Cube::setup()
 {
-	//decode texture
-	string fullPath = MainRunner::ExePath() + "\\" + textureFileName;
-
-	if (textures.find(fullPath) != textures.end()) {
-		textureID = textures[fullPath];
-		return;
-	}
-
-	unsigned error = lodepng::decode(texBuffer, texWidth, texHeight, fullPath.c_str());
-
-	if (error) {
-		cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-	}
-	else {
-		glGenTextures(1, &textureID);
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texBuffer[0]);
-
-		textures[fullPath] = textureID;
-	}
 
 }
 
@@ -211,7 +219,34 @@ void Cube::SetUpCube()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+	glEnable(GL_BLEND); 
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 	texSampler = glGetUniformLocation(MainRunner::getInstance()->getProgram(), "texSampler");
+
+	//decode texture
+	string fullPath = MainRunner::ExePath() + "\\" + textureFileName;
+	unsigned error = lodepng::decode(texBuffer, texWidth, texHeight, fullPath.c_str());
+	if (error) {
+		cout << "decoder error " << error << ": " << lodepng_error_text(error) << " ; with input file " << fullPath << std::endl;
+	}
+	else {
+		glGenTextures(1, &textureID);
+
+		glActiveTexture(GL_TEXTURE0);
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texBuffer[0]);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		cout << "Set up texture with glGetError() " << glGetError() << "\n";
+
+		glUniform1i(texSampler, 0);
+	}
 }
 
 void Cube::TearDownCube()

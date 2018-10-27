@@ -15,9 +15,20 @@ using namespace std;
 class Cube
 {
 public:
+	enum Face
+	{
+		logo,
+		startGame,
+		X,
+		lose,
+		win,
+		O
+	};
+
+public:
 	Cube();
 	Cube(Cube &c);
-	Cube(glm::vec3 pos, glm::mat3 rotation, glm::vec3 scale, string textureFileName = "");
+	Cube(glm::vec3 pos, glm::vec3 scale);
 	~Cube();
 
 	void draw(glm::mat4 mvp);
@@ -26,19 +37,22 @@ public:
 	static void SetUpCube();
 	static void TearDownCube();
 
+	Face getFace() { return face; }
+	void setFace(Face face);
+
 private:
 	glm::vec3 pos;
-	glm::mat3 rotation;
 	glm::vec3 scale;
-	string textureFileName;
+
+	Face face;
 
 	glm::mat4 mvp;
-	GLuint textureID;
-	unsigned int texWidth;
-	unsigned int texHeight;
-	std::vector<unsigned char> texBuffer;
 	
-	static unordered_map<string, GLuint> textures;
+	static string textureFileName;
+	static unsigned int texWidth;
+	static unsigned int texHeight;
+	static std::vector<unsigned char> texBuffer;
+	static GLuint textureID;
 	static GLuint VertexArrayID;
 	static GLuint vertexbuffer;
 	static GLuint uvbuffer;
